@@ -1,13 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-
-function SignUp() {
+function Login() {
   const [formData, setFormData] = useState({
-    name: "",
     email: "",
     password: "",
-    role: "",
   });
+
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -27,7 +27,7 @@ function SignUp() {
     }
 
     try {
-      const res = await fetch("http://localhost:3000/api/auth/signup", {
+      const res = await fetch("http://localhost:3000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -38,7 +38,7 @@ function SignUp() {
       const data = await res.json();
 
       if (res.ok) {
-        alert("SignUp Successful!");
+        navigate("/");
       } else {
         alert(data.message || "Signup failed");
       }
@@ -54,19 +54,9 @@ function SignUp() {
         onSubmit={handleSubmit}
         className="w-full max-w-md bg-white p-8 rounded-lg shadow"
       >
-        <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">Log In</h2>
 
-        <label htmlFor="full-name" className="block mb-2 text-sm font-medium">
-          Full Name
-        </label>
-        <input
-          type="text"
-          name="name"
-          id="full-name"
-          value={formData.name}
-          onChange={handleChange}
-          className="w-full px-4 py-2 rounded-md mb-4 bg-gray-100 shadow-sm"
-        />
+        
 
         <label htmlFor="email" className="block mb-2 text-sm font-medium">
           Email
@@ -92,23 +82,7 @@ function SignUp() {
           className="w-full px-4 py-2 rounded-md mb-4 bg-gray-100 shadow-sm"
         />
 
-        <label htmlFor="role" className="block mb-2 text-sm font-medium">
-          Role
-        </label>
-        <select
-          name="role"
-          id="role"
-          value={formData.role}
-          onChange={handleChange}
-          className="block w-[50%] bg-gray-100 shadow-sm px-4 py-1 rounded-md mb-6"
-        >
-          <option value="" disabled hidden>
-            Choose your role
-          </option>
-          <option value="admin">Admin</option>
-          <option value="manager">Manager</option>
-          <option value="employee">Employee</option>
-        </select>
+        
         <div className="w-full flex justify-center p-8">
           <button
             type="submit"
@@ -122,4 +96,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default Login;
