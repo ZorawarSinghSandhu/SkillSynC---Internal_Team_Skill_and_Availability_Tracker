@@ -1,13 +1,16 @@
 import express from "express";
 import User from "../models/User.js";
 import bcrypt from "bcryptjs";
-import dotenv from "dotenv";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import authMiddleware from "../middlewares/authMiddleware.js";
+
 
 dotenv.config();
-const SECRET_KEY = process.env.JWT_SECRET;
 
 const router = express.Router();
+
+const SECRET_KEY = process.env.JWT_SECRET;
 
 router.post("/signup", async (req, res) => {
     // console.log("Signup route hit");
@@ -60,9 +63,24 @@ router.post("/login",  async (req, res) => {
     res.status(200).json({message: "Login Successful", token});
 
 }catch(err){
-    console.log(err);
-    res.status(500).json({message: "Server Error"});
+    res.status(500).json({message: "Server Error", error: err.message});
 }
+});
+
+router.get("/me", authMiddleware, async (req, res) => {
+    try{
+        const userId = req.user.userId;
+
+        const user = await User.findById(userId).select("-password");
+
+        if(!user){
+            return res.status(404).json({message: "User not found"});
+        }
+
+        res.status(200).json(user);
+    } catch(error){
+        res.status(500).json({message: "Server Error", error: error.message});
+    }
 });
 
 export default router;

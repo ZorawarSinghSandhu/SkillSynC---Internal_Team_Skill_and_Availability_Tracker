@@ -38,6 +38,8 @@ function Login() {
       const data = await res.json();
 
       if (res.ok) {
+        localStorage.setItem("token", data.token);
+        console.log("Token:", data.token);
         navigate("/");
       } else {
         alert(data.message || "Signup failed");
@@ -55,8 +57,6 @@ function Login() {
         className="w-full max-w-md bg-white p-8 rounded-lg shadow"
       >
         <h2 className="text-2xl font-bold mb-6 text-center">Log In</h2>
-
-        
 
         <label htmlFor="email" className="block mb-2 text-sm font-medium">
           Email
@@ -82,7 +82,6 @@ function Login() {
           className="w-full px-4 py-2 rounded-md mb-4 bg-gray-100 shadow-sm"
         />
 
-        
         <div className="w-full flex justify-center p-8">
           <button
             type="submit"
