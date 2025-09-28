@@ -30,6 +30,12 @@ const userSchema = mongoose.Schema(
       type: [String],
       default: [],
     },
+
+    availability: {
+      type: String,
+      enum: ["Available", "Busy", "On Leave"],
+      default: "Available"
+    },
   },
   { timestamps: true }
 );
